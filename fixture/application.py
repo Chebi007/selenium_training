@@ -1,13 +1,13 @@
 from selenium import webdriver
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from fixture.session import SessionHelper
 
 
 class Application:
 
     def __init__(self):
-        self.wd = webdriver.Firefox()
-        #self.wd = webdriver.Chrome()
-        #self.wd = webdriver.Ie()
+        binary = FirefoxBinary("C:\\Program Files\\Firefox Nightly\\firefox.exe")
+        self.wd = webdriver.Firefox(firefox_binary=binary, firefox_profile=webdriver.FirefoxProfile())
         self.wd.implicitly_wait(3)
         self.session = SessionHelper(self)
 
