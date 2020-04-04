@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from fixture.session import SessionHelper
 from fixture.admin import AdminHelper
+from fixture.main import MainHelper
 
 
 class Application:
@@ -12,11 +13,17 @@ class Application:
         self.wd.implicitly_wait(3)
         self.session = SessionHelper(self)
         self.admin = AdminHelper(self)
+        self.main = MainHelper(self)
 
     def open_admin_page(self):
         wd = self.wd
         if not wd.current_url.endswith("/admin/"):
             wd.get('http://localhost/litecart/admin/')
+
+    def open_main_page(self):
+        wd = self.wd
+        if not wd.current_url.endswith("/litecart/en/"):
+            wd.get('http://localhost/litecart/en/')
 
     def destroy(self):
         self.wd.quit()
