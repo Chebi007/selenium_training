@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.common.exceptions import NoSuchElementException
 from fixture.session import SessionHelper
 from fixture.admin import AdminHelper
 from fixture.main import MainHelper
@@ -24,6 +25,14 @@ class Application:
         wd = self.wd
         if not wd.current_url.endswith("/litecart/en/"):
             wd.get('http://localhost/litecart/en/')
+
+    def is_element_present(self, *args):
+        wd = self.wd
+        try:
+            wd.find_element(*args)
+            return True
+        except NoSuchElementException:
+            return False
 
     def destroy(self):
         self.wd.quit()
