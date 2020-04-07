@@ -1,6 +1,6 @@
 import re
 from model.product import Product
-import time
+
 
 class ProductHelper:
 
@@ -19,9 +19,7 @@ class ProductHelper:
     def get_product_by_index_on_edit_page(self, index, block):
         wd = self.app.wd
         self.app.open_main_page()
-        time.sleep(6)
         wd.find_elements_by_css_selector("#box-%s li" % block)[index].click()
-        time.sleep(4)
         name = wd.find_element_by_css_selector("h1.title").text
         regular_price = wd.find_element_by_css_selector(".regular-price").text
         campaign_price = wd.find_element_by_css_selector(".campaign-price").text
