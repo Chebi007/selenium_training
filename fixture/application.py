@@ -13,7 +13,7 @@ from fixture.customer import CustomerHelper
 class Application:
 
     def __init__(self):
-        self.wd = webdriver.Firefox()
+        self.wd = webdriver.Chrome()
         self.wd.implicitly_wait(5)
         self.session = SessionHelper(self)
         self.admin = AdminHelper(self)
@@ -31,18 +31,18 @@ class Application:
         if not wd.current_url.endswith("/litecart/en/"):
             wd.get('http://localhost/litecart/en/')
 
-    #def is_element_present(self, *args):
-        #wd = self.wd
-        #try:
-            #wd.find_element(*args)
-            #return True
-        #except NoSuchElementException:
-            #return False
+    def is_element_present(self, *args):
+        wd = self.wd
+        try:
+            wd.find_element(*args)
+            return True
+        except NoSuchElementException:
+            return False
 
     def destroy(self):
         self.wd.quit()
 
-    def is_element_present(self, locator):
+    def wait_until_element_present(self, locator):
         wd = self.wd
         wait = WebDriverWait(wd, 10)
         return wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "%s" % locator)))

@@ -1,4 +1,4 @@
-from selenium.webdriver.common.action_chains import ActionChains
+
 
 class SessionHelper:
 
@@ -22,8 +22,7 @@ class SessionHelper:
 
     def login_on_main_page(self, customer):
         wd = self.app.wd
-        #self.app.open_main_page()
-        self.app.is_element_present("[name=email]")
+        self.app.wait_until_element_present("[name=email]")
         wd.find_element_by_name("email").click()
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys(customer.email)
@@ -34,9 +33,5 @@ class SessionHelper:
 
     def logout_on_main_page(self):
         wd = self.app.wd
-        self.app.is_element_present("#box-account li>a[href*=logout]")
         element = wd.find_element_by_css_selector("#box-account li>a[href*=logout]")
-        ActionChains(wd).move_to_element(element).click()
-        ActionChains(wd).perform()
-
-
+        wd.execute_script("arguments[0].click();", element)
