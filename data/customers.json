@@ -1,21 +1,21 @@
 [
   {
     "py/object": "model.customer.Customer",
-    "address1": "addresss1L3vo3x8",
-    "address2": "addresss2M",
-    "city": "cityLVNltSjadR",
-    "company": "companyLTCsq08M2A61x",
+    "address1": "addresss1SL",
+    "address2": "addresss236",
+    "city": "cityB6MkML7o",
+    "company": "companyr",
     "confirmed_password": "password",
     "country": "United States",
-    "email": "eioU0kkr@gmail.com",
-    "firstname": "firstnamefC6mdp9PYYci",
+    "email": "eZhlRrqFDSSVyi@gmail.com",
+    "firstname": "firstnameKPNB1hDkAHqvR",
     "id": null,
-    "lastname": "lastnamebw",
+    "lastname": "lastnamebo6RW1Dii2",
     "newsletter": null,
     "password": "password",
-    "phone": "1048654567",
+    "phone": "161421080",
     "postcode": "12345",
-    "tax_id": "9XVes",
+    "tax_id": "9",
     "zone_code": "Arizona"
   }
 ]

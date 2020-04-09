@@ -1,5 +1,8 @@
 import re
+from selenium.webdriver.support.ui import Select
+import os.path
 from model.product import Product
+import time
 
 
 class ProductHelper:
@@ -67,3 +70,43 @@ class ProductHelper:
 
     def get_numbers(self, str):
         return re.findall('[\d\.\d]+', str)
+
+    def fill_field_value(self, field_name, text):
+        wd = self.app.wd
+        wd.find_element_by_name(field_name).click()
+        wd.find_element_by_name(field_name).send_keys(text)
+
+    def select_by_text(self, field_name, text):
+        wd = self.app.wd
+        select = Select(wd.find_element_by_name(field_name))
+        select.select_by_visible_text(text)
+
+    def load_file(self, field_name, file):
+        wd = self.app.wd
+        wd.find_element_by_name(field_name).send_keys(file)
+
+    def add_new_product(self):
+        wd = self.app.wd
+        self.app.wait_until_element_present("li#app- a[href$=catalog]")
+        self.app.admin.open_menu_item("Catalog")
+        wd.find_element_by_css_selector("a.button[href$=edit_product]").click()
+
+        status =wd.find_elements_by_css_selector("#tab-general tr")[0]
+        status.find_element_by_css_selector("[type=radio]").click()
+
+        self.fill_field_value("name[en]", "Liliiaa")
+        self.fill_field_value("code", "123456")
+        categories = wd.find_elements_by_css_selector("#tab-general tr")[6]
+        categories.find_element_by_css_selector("input[type=checkbox]").click()
+        genders = wd.find_elements_by_css_selector("#tab-general tr")[11]
+        genders.find_element_by_css_selector("input[type=checkbox]").click()
+        self.fill_field_value("quantity", "25")
+        self.select_by_text("default_category_id", "Subcategory")
+        self.select_by_text("quantity_unit_id", "pcs")
+        self.select_by_text("delivery_status_id", "3-5 days")
+        self.select_by_text("sold_out_status_id", "Temporary sold out")
+        self.load_file("new_images[]", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'snickers.jpg'))
+        self.fill_field_value("date_valid_from", "2020-04-04")
+        self.fill_field_value("date_valid_to", "2020-04-30")
+        wd.find_element_by_css_selector("[name=save]").click()
+
