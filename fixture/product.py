@@ -1,6 +1,8 @@
 import re
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
 import os.path
+from selenium.webdriver.common.action_chains import ActionChains
 from model.product import Product
 import time
 
@@ -85,10 +87,19 @@ class ProductHelper:
         wd = self.app.wd
         wd.find_element_by_name(field_name).send_keys(file)
 
+    def open_tab(self, tab_name):
+        wd = self.app.wd
+        if tab_name == 'Information':
+            wd.find_elements_by_css_selector("ul.index > li")[1].click()
+        if tab_name == 'Prices':
+            wd.find_elements_by_css_selector("ul.index > li")[3].click()
+
+
     def add_new_product(self):
         wd = self.app.wd
         self.app.wait_until_element_present("li#app- a[href$=catalog]")
         self.app.admin.open_menu_item("Catalog")
+        self.app.wait_until_element_present("a.button[href$=edit_product]")
         wd.find_element_by_css_selector("a.button[href$=edit_product]").click()
 
         status =wd.find_elements_by_css_selector("#tab-general tr")[0]
@@ -108,5 +119,57 @@ class ProductHelper:
         self.load_file("new_images[]", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'snickers.jpg'))
         self.fill_field_value("date_valid_from", "2020-04-04")
         self.fill_field_value("date_valid_to", "2020-04-30")
+
+        self.open_tab('Information')
+        self.select_by_text("manufacturer_id", "ACME Corp.")
+        #self.select_by_text("supplier_id", "ACME Corp.")
+        self.fill_field_value("keywords", "snickers")
+        self.fill_field_value("short_description[en]", "this is short description")
+        self.fill_field_value("description[en]", "this is a long long long description")
+        self.fill_field_value("head_title[en]", "SNICKERS!!!!!")
+        self.fill_field_value("meta_description[en]", "djgbhskdgskdjfdsfdsfsdfsdf")
+
+        self.open_tab('Prices')
+        self.fill_field_value("purchase_price", "2")
+        self.select_by_text("purchase_price_currency_code", "Euros")
+        self.fill_field_value("prices[USD]", "456")
+        self.fill_field_value("gross_prices[USD]", "456")
+        self.fill_field_value("prices[EUR]", "0.5")
+        self.fill_field_value("gross_prices[EUR]", "1")
+
+        wd.find_element_by_css_selector("#add-campaign").click()
+        #wd.find_elements_by_css_selector("#table-campaigns tr>td")[0].send_keys("2020-05-01")
+        #wd.find_elements_by_css_selector("#table-campaigns tr>td")[1].send_keys("2020-07-01")
+
+        #self.app.is_element_present(wd.find_element_by_css_selector("campaigns[new_2][start_date]"))
+        self.app.wait_until_element_present("#table-campaigns tr>td>input")
+        self.app.is_element_present("#table-campaigns tr>td>input")
+        rows = wd.find_elements_by_css_selector("#table-campaigns tr>td>input")
+        rows[1].send_keys(Keys.HOME + "01.02.2020" + Keys.ARROW_RIGHT + "05:06")
+        #rows[1].send_keys(Keys.ARROW_RIGHT)
+        #rows[1].send_keys("0203")
+
+
+        time.sleep(2)
+        rows[2].send_keys(Keys.HOME + "03.02.2020" + Keys.ARROW_RIGHT + "05:06")
+        time.sleep(2)
+        rows[3].send_keys("1")
+        #time.sleep(2)
+        #rows[4].send_keys("16")
+        #time.sleep(2)
+        #rows[5].send_keys("17")
+        #wd.find_element_by_css_selector("#table-campaigns tr>td>input[name=datetime-local]").click()
+        #wd.find_element_by_css_selector("#table-campaigns tr>td>input[type=datetime-local]").send_keys("2020-01-01 1200")
+
+
+        time.sleep(3)
+        #self.fill_field_value("campaigns[new_2][start_date]", "2020-05-01")
+        #self.fill_field_value("campaigns[new_2][end_date]", "2020-05-12")
+        #self.fill_field_value("campaigns[new_2][percentage]", "15")
+        #self.fill_field_value("campaigns[new_2][USD]", "1.5")
+        #self.fill_field_value("campaigns[new_2][EUR]", "1.3")
+
+
         wd.find_element_by_css_selector("[name=save]").click()
+        time.sleep(3)
 
