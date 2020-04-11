@@ -1,0 +1,21 @@
+[
+  {
+    "py/object": "model.product.Product",
+    "campaign_price": null,
+    "code": "1585272792",
+    "date_valid_from": "2020-04-04",
+    "date_valid_to": "2021-04-04",
+    "description": "long descriptionJGDd3twcirs8bEgF5zbtVulbdhZATnSdGaSWQHAsl9my",
+    "head_title": "head titleVS452QgbM",
+    "id": null,
+    "keywords": "keywordhBJK0RIay561O5",
+    "manufacturer": "ACME Corp.",
+    "meta_description": "meta descriptionwkeHiUFCrAYdPo",
+    "name": "name",
+    "price": "2493",
+    "quantity": "278",
+    "regular_price": null,
+    "short_description": "short_descriptionS73sQ5QVoHj8z",
+    "supplier": null
+  }
+]
