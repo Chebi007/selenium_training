@@ -1,3 +1,4 @@
+from selenium.webdriver.common.by import By
 
 
 class SessionHelper:
@@ -22,7 +23,7 @@ class SessionHelper:
 
     def login_on_main_page(self, customer):
         wd = self.app.wd
-        self.app.wait_until_element_present("[name=email]")
+        self.app.wait_until_element_present((By.NAME, "email"))
         wd.find_element_by_name("email").click()
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys(customer.email)

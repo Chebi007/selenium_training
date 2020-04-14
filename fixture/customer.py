@@ -1,4 +1,5 @@
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
 
 
 class CustomerHelper:
@@ -8,7 +9,7 @@ class CustomerHelper:
 
     def fill_account_form(self, customer):
         wd = self.app.wd
-        self.app.wait_until_element_present("[name=tax_id]")
+        self.app.wait_until_element_present((By.NAME, "tax_id"))
         self.app.fill_field_value('tax_id', customer.tax_id)
         self.app.fill_field_value('company', customer.company)
         self.app.fill_field_value('firstname', customer.firstname)

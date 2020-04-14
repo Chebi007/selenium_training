@@ -1,5 +1,6 @@
 import re
 import os.path
+from selenium.webdriver.common.by import By
 from model.product import Product
 import time
 
@@ -85,9 +86,9 @@ class ProductHelper:
         wd = self.app.wd
         time.sleep(1)
         self.app.admin.open_menu_item("Catalog")
-        self.app.wait_until_element_present("a.button[href$=edit_product]")
+        self.app.wait_until_element_present((By.CSS_SELECTOR, "a.button[href$=edit_product]"))
         wd.find_element_by_css_selector("a.button[href$=edit_product]").click()
-        self.app.wait_until_element_present("input[type=radio]")
+        self.app.wait_until_element_present((By.CSS_SELECTOR, "input[type=radio]"))
         status = wd.find_elements_by_css_selector("#tab-general tr")[0]
         status.find_element_by_css_selector("[type=radio]").click()
         self.app.fill_field_value("name[en]", product.name)
