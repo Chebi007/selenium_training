@@ -1,3 +1,4 @@
+from selenium.common.exceptions import WebDriverException
 
 
 class there_is_window_other_than(object):
@@ -12,3 +13,22 @@ class there_is_window_other_than(object):
             return new[0]
         else:
             return False
+
+class number_of_elements(object):
+
+    def __init__(self, locator, number):
+        self.locator = locator
+        self.number = number
+
+    def __call__(self, wd):
+        elements = _find_elements(wd, self.locator)
+        if len(elements) == self.number:
+            return elements
+        else:
+            return False
+
+def _find_elements(wd, by):
+    try:
+        return wd.find_elements(*by)
+    except WebDriverException as e:
+        raise e

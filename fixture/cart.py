@@ -1,6 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from fixture.custom_wait import number_of_elements
 
 
 class CartHelper:
@@ -31,23 +32,13 @@ class CartHelper:
         wd = self.app.wd
         wd.find_elements_by_css_selector("[value=Remove]")[0].click()
 
-    def wait_until_number_of_elements(self, number):
+    def add_and_remove_items(self, number):
         wd = self.app.wd
         wait = WebDriverWait(wd, 10)
-        wait.until(lambda wd: len(wd.find_elements_by_css_selector("#checkout-summary-wrapper tr")[1:-5]) == number)
-
-    def add_and_remove_three_items(self):
-        wd = self.app.wd
-        self.add_item()
-        self.check_quantity('1')
-        self.add_item()
-        self.check_quantity('2')
-        self.add_item()
-        self.check_quantity('3')
+        for i in range(1, number):
+            self.add_item()
+            self.check_quantity('%s' % i)
         self.checkout()
-        self.remove_item()
-        self.wait_until_number_of_elements(2)
-        self.remove_item()
-        self.wait_until_number_of_elements(1)
-        self.remove_item()
-        self.app.wait_until_staleness_of_element(wd.find_elements_by_css_selector("#checkout-summary-wrapper tr")[0])
+        for i in range(1, number):
+            self.remove_item()
+            wait.until(number_of_elements((By.CSS_SELECTOR, "#checkout-summary-wrapper tr"), 8 - i))
