@@ -1,3 +1,5 @@
+from selenium.webdriver.support.wait import WebDriverWait
+from fixture.custom_wait import there_is_window_other_than
 
 
 class AdminHelper:
@@ -81,3 +83,29 @@ class AdminHelper:
             wd.find_element_by_css_selector("[name=cancel]").click()
             dict[key] = zones
         return dict
+
+    def edit_country_by_index(self, index):
+        wd = self.app.wd
+        row = wd.find_elements_by_css_selector("tr.row")[index]
+        row.find_elements_by_css_selector("td")[6].click()
+
+    def open_window(self, link):
+        wd = self.app.wd
+        main_window = wd.current_window_handle
+        old_windows = wd.window_handles
+        link.click()
+        wait = WebDriverWait(wd, 10)
+        new_window = wait.until(there_is_window_other_than(old_windows))
+        wd.switch_to.window(new_window)
+        wd.close()
+        wd.switch_to.window(main_window)
+
+    def open_all_windows_on_edit_country_page(self):
+        wd = self.app.wd
+        self.open_menu_item("Countries")
+        self.edit_country_by_index(1)
+        rows = wd.find_elements_by_css_selector("#content tr [target=_blank]")
+        for i in range(0, len(rows)):
+            link = rows[i]
+            self.open_window(link)
+
