@@ -1,5 +1,8 @@
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
 from fixture.custom_wait import there_is_window_other_than
+import time
 
 
 class AdminHelper:
@@ -27,6 +30,7 @@ class AdminHelper:
 
     def open_menu_item(self, item):
         wd = self.app.wd
+        self.app.wait_until_element_present((By.CSS_SELECTOR, "li#app-"))
         rows = wd.find_elements_by_css_selector("li#app-")
         for row in range(0, len(rows)):
             rows = wd.find_elements_by_css_selector("li#app-")
@@ -109,3 +113,12 @@ class AdminHelper:
             link = rows[i]
             self.open_window(link)
 
+    def get_browser_logs(self):
+        wd = self.app.wd
+        wd.get("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1")
+        rows = wd.find_elements_by_css_selector("tr.row")[3:]
+        for row in range(0, len(rows)):
+            rows = wd.find_elements_by_css_selector("tr.row")[3:]
+            rows[row].find_element_by_css_selector("td a").click()
+            self.app.get_browser_logs()
+            wd.find_element_by_name("cancel").click()

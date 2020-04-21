@@ -3,6 +3,10 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
+from datetime import datetime
+import shutil
 from fixture.session import SessionHelper
 from fixture.admin import AdminHelper
 from fixture.main import MainHelper
@@ -11,10 +15,27 @@ from fixture.customer import CustomerHelper
 from fixture.cart import CartHelper
 
 
+class MyListener(AbstractEventListener):
+    #def before_find(self, by, value, wd):
+        #print(by, value)
+    #def after_find(self, by, value, wd):
+        #print(by, value, "found")
+    def on_exception(self, exception, wd):
+        print(exception)
+        tmp = wd.get_screenshot_as_file('screen.png')
+        screen = "screen" + str(datetime.now().microsecond) + ".png"
+        try:
+            shutil.copy(tmp, screen)
+        except IOError as e:
+            print("I/O error({0}): {1}".format(e.errno, e.strerror))
+        print("Screenshot saved as '%s'" % screen)
+
+
 class Application:
 
     def __init__(self):
-        self.wd = webdriver.Firefox()
+        d = DesiredCapabilities.CHROME['goog:loggingPrefs'] = {'browser': 'ALL'}
+        self.wd = EventFiringWebDriver(webdriver.Chrome(desired_capabilities=d), MyListener())
         self.wd.implicitly_wait(5)
         self.session = SessionHelper(self)
         self.admin = AdminHelper(self)
@@ -68,3 +89,8 @@ class Application:
         wd = self.wd
         select = Select(wd.find_element_by_name(field_name))
         select.select_by_visible_text(text)
+
+    def get_browser_logs(self):
+        wd = self.wd
+        for l in wd.get_log("browser"):
+            print(l)
