@@ -1,6 +1,5 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver import ActionChains
 from fixture.custom_wait import there_is_window_other_than
 import time
 
@@ -116,9 +115,18 @@ class AdminHelper:
     def get_browser_logs(self):
         wd = self.app.wd
         wd.get("http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1")
+        dict = {}
         rows = wd.find_elements_by_css_selector("tr.row")[3:]
         for row in range(0, len(rows)):
             rows = wd.find_elements_by_css_selector("tr.row")[3:]
+            key = rows[row].find_element_by_css_selector("td a").text
             rows[row].find_element_by_css_selector("td a").click()
-            self.app.get_browser_logs()
-            wd.find_element_by_name("cancel").click()
+            log = self.app.get_browser_logs()
+            if log is not None:
+                dict[key] = log
+            # без использования sleep не удается прогнать тест в Chrome
+            time.sleep(1)
+            self.app.wait_until_element_present((By.CSS_SELECTOR, "button[name=cancel]"))
+            wd.find_element_by_css_selector("button[name=cancel]").click()
+        return dict
+

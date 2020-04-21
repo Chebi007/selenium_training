@@ -93,4 +93,4 @@ class Application:
     def get_browser_logs(self):
         wd = self.wd
         for l in wd.get_log("browser"):
-            print(l)
+            return l
